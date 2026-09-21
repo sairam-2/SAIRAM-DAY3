@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order Form | Foodie</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="brand" href="/">
+            <span class="brand-mark">✨</span>
+            <span>Foodie<span class="brand-text-accent">Cloud</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/">📊 Dashboard</a>
+            <a href="/create">➕ Add Food</a>
+            <a href="/read">📋 Catalog</a>
+            <a href="/update">✏️ Edit</a>
+            <a href="/delete">🗑️ Delete</a>
+        </div>
+    </nav>
+
+    <div class="toolbar">
+        <div>
+            <p class="eyebrow">CUSTOMER CHECKOUT</p>
+            <h1 class="page-heading">Place an Order</h1>
+            <p class="subtitle">Sample customer order placement interface.</p>
+        </div>
+        <div class="actions">
+            <a class="btn btn-secondary" href="/">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="card form-card" style="max-width: 800px; margin: 0 auto;">
+        <form>
+            <h3 style="margin-bottom: 16px; color: var(--text-main); font-size: 1.15rem;">1. Customer Information</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                <div class="field" style="margin-bottom: 0;">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter customer name" required>
+                </div>
+                <div class="field" style="margin-bottom: 0;">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+91 98765 43210" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="address">Delivery Address</label>
+                <textarea id="address" rows="3" placeholder="Enter complete street address" required></textarea>
+            </div>
+
+            <h3 style="margin: 24px 0 16px; color: var(--text-main); font-size: 1.15rem;">2. Order Specifications</h3>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px;">
+                <div class="field" style="margin-bottom: 0;">
+                    <label for="restaurant">Restaurant Selection</label>
+                    <select id="restaurant" required>
+                        <option value="">Choose Restaurant</option>
+                        <option value="1">The Blue Lagoon Cafe</option>
+                        <option value="2">Skyline Bistro</option>
+                        <option value="3">Ocean View Trattoria</option>
+                    </select>
+                </div>
+                <div class="field" style="margin-bottom: 0;">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" min="1" value="1" required>
+                </div>
+            </div>
+
+            <div class="actions" style="margin-top: 28px;">
+                <button type="button" class="btn btn-primary" onclick="alert('Order placed successfully demo!');">
+                    ✨ Place Order
+                </button>
+                <button type="reset" class="btn btn-secondary">
+                    Clear Form
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>Spring Boot JPA System</span>
+        <span>•</span>
+        <span class="footer-pill">Modern Checkout Demo</span>
+    </footer>
+</div>
+</body>
+</html>

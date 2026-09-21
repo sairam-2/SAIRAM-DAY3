@@ -1,0 +1,18 @@
+FOOD ORDER CRUD - DATABASE SETUP
+
+1. Start MySQL.
+2. The application uses database: jdbc_demo
+3. The JDBC URL has createDatabaseIfNotExist=true, so MySQL will create jdbc_demo if the configured user has permission.
+4. Check src/main/resources/application.properties and change username/password if your MySQL credentials are different.
+5. Run the Spring Boot application.
+6. Open http://localhost:8080/
+
+JPA will create/update the table named food_orders automatically because spring.jpa.hibernate.ddl-auto=update.
+
+CRUD:
+CREATE - Place Order
+READ   - Orders are displayed in the table
+UPDATE - Click Edit, modify fields, click Update Order
+DELETE - Click Delete
+
+The existing REST API for the Food entity is preserved under /api/orders.

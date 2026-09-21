@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Foodie Menu Cloud</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="brand" href="/">
+            <span class="brand-mark">✨</span>
+            <span>Foodie<span class="brand-text-accent">Cloud</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="active">📊 Dashboard</a>
+            <a href="/create">➕ Add Food</a>
+            <a href="/read">📋 Catalog</a>
+            <a href="/update">✏️ Edit</a>
+            <a href="/delete">🗑️ Delete</a>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Spring Boot & JPA Database Active
+        </div>
+        <h1>Modern Menu Management & Analytics</h1>
+        <p>A unified cloud-ready food dashboard. Track dishes, oversee live availability, adjust prices in real time, and manage your inventory with precision.</p>
+        <div class="hero-actions">
+            <a href="/create" class="btn btn-white">➕ Add New Food Item</a>
+            <a href="/read" class="btn btn-outline-white">Browse Full Catalog →</a>
+        </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-header">
+                <div class="stat-icon">🍲</div>
+                <span class="stat-pill">Total Menu</span>
+            </div>
+            <div class="stat-value" th:text="${totalFoods}">0</div>
+            <div class="stat-label">REGISTERED FOOD ITEMS</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-header">
+                <div class="stat-icon" style="color:#059669; background:#ecfdf5;">🟢</div>
+                <span class="stat-pill" style="color:#059669; background:#ecfdf5;">Active</span>
+            </div>
+            <div class="stat-value" th:text="${availableFoods}">0</div>
+            <div class="stat-label">AVAILABLE FOR ORDER</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-header">
+                <div class="stat-icon">🏷️</div>
+                <span class="stat-pill">Pricing</span>
+            </div>
+            <div class="stat-value" th:text="${averagePrice != null ? '₹' + #numbers.formatDecimal(averagePrice, 1, 2) : '₹0.00'}">₹0.00</div>
+            <div class="stat-label">AVERAGE DISH PRICE</div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Header -->
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Quick Operations</h2>
+            <p class="section-subtitle">Core CRUD actions integrated directly with your MySQL database</p>
+        </div>
+    </div>
+
+    <!-- Quick Actions Grid -->
+    <section class="crud-grid">
+        <a class="action-card" href="/create">
+            <div class="action-icon">➕</div>
+            <div>
+                <h3>Create Food Item</h3>
+                <p>Register new cuisine, price points, and availability status instantly.</p>
+            </div>
+            <div class="action-arrow">→</div>
+        </a>
+
+        <a class="action-card" href="/read">
+            <div class="action-icon">📋</div>
+            <div>
+                <h3>Menu Catalog</h3>
+                <p>Browse, filter, and search through all food records with live status chips.</p>
+            </div>
+            <div class="action-arrow">→</div>
+        </a>
+
+        <a class="action-card" href="/update">
+            <div class="action-icon">✏️</div>
+            <div>
+                <h3>Update Food Details</h3>
+                <p>Adjust pricing, availability toggles, or dish labels seamlessly.</p>
+            </div>
+            <div class="action-arrow">→</div>
+        </a>
+
+        <a class="action-card" href="/delete">
+            <div class="action-icon" style="background:var(--danger-bg); color:var(--danger);">🗑️</div>
+            <div>
+                <h3>Remove Items</h3>
+                <p>Clean up outdated dishes with safe deletion confirmations.</p>
+            </div>
+            <div class="action-arrow">→</div>
+        </a>
+    </section>
+
+    <!-- Live Menu Preview -->
+    <div class="card" style="margin-top: 15px;">
+        <div class="section-header" style="margin: 0 0 20px;">
+            <div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Recent Menu Items</h3>
+                <p style="color: var(--text-secondary); font-size: 0.88rem;">Quick glance at your food catalog</p>
+            </div>
+            <a href="/read" class="btn btn-secondary" style="font-size: 0.84rem; padding: 8px 16px;">View All Items →</a>
+        </div>
+
+        <div th:if="${foods == null or #lists.isEmpty(foods)}" class="empty-state">
+            <div class="empty-icon">🍽️</div>
+            <h3>No Food Items Registered</h3>
+            <p>Your menu database is currently empty. Get started by adding your first dish!</p>
+            <a class="btn btn-primary" href="/create">➕ Add First Dish</a>
+        </div>
+
+        <div th:if="${foods != null and not #lists.isEmpty(foods)}" class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Dish Name</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="food, iterStat : ${foods}" th:if="${iterStat.index < 5}">
+                        <td><span class="id-badge" th:text="'#' + ${food.id}">#1</span></td>
+                        <td>
+                            <div class="food-title">
+                                <span class="food-icon-chip">🍲</span>
+                                <span th:text="${food.foodName}">Dish Name</span>
+                            </div>
+                        </td>
+                        <td><span class="price-tag" th:text="'₹' + ${#numbers.formatDecimal(food.price, 1, 2)}">₹0.00</span></td>
+                        <td>
+                            <span th:if="${food.isAvailable}" class="badge badge-yes">● Available</span>
+                            <span th:unless="${food.isAvailable}" class="badge badge-no">● Out of Stock</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <a class="btn btn-secondary" th:href="@{'/update#food-' + ${food.id}}" style="padding: 6px 12px; font-size: 0.82rem;">✏️ Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>Spring Boot JPA System</span>
+        <span>•</span>
+        <span class="footer-pill">MySQL 8.0 Connected</span>
+        <span>•</span>
+        <span class="footer-pill">Clean UI Architecture</span>
+    </footer>
+</div>
+</body>
+</html>

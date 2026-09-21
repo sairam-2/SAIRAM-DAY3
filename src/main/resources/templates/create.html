@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Food | Foodie</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="brand" href="/">
+            <span class="brand-mark">✨</span>
+            <span>Foodie<span class="brand-text-accent">Cloud</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/">📊 Dashboard</a>
+            <a href="/create" class="active">➕ Add Food</a>
+            <a href="/read">📋 Catalog</a>
+            <a href="/update">✏️ Edit</a>
+            <a href="/delete">🗑️ Delete</a>
+        </div>
+    </nav>
+
+    <div class="toolbar">
+        <div>
+            <p class="eyebrow">CREATE OPERATION</p>
+            <h1 class="page-heading">Add Food Item</h1>
+            <p class="subtitle">Fill in the dish specifications to register it in your database.</p>
+        </div>
+        <div class="actions">
+            <a class="btn btn-secondary" href="/read">📋 View Existing Catalog</a>
+        </div>
+    </div>
+
+    <div class="form-layout">
+        <!-- Form Column -->
+        <main class="form-card">
+            <form th:action="@{/create}" th:object="${food}" method="post">
+                <div class="field">
+                    <label for="foodName">Dish / Food Name</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🍽️</span>
+                        <input id="foodName" class="input-with-icon" type="text" th:field="*{foodName}" placeholder="e.g. Paneer Butter Masala" required oninput="updateLivePreview()">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="price">Price (₹ INR)</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">₹</span>
+                        <input id="price" class="input-with-icon" type="number" th:field="*{price}" step="0.01" min="0" placeholder="e.g. 240.00" required oninput="updateLivePreview()">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="isAvailable">Inventory Availability</label>
+                    <select id="isAvailable" th:field="*{isAvailable}" required onchange="updateLivePreview()">
+                        <option value="true" selected>🟢 Available for Customers</option>
+                        <option value="false">🔴 Out of Stock / Hidden</option>
+                    </select>
+                </div>
+
+                <div class="actions" style="margin-top: 26px;">
+                    <button class="btn btn-primary" type="submit">➕ Register Dish to Database</button>
+                    <a class="btn btn-secondary" href="/">← Cancel</a>
+                </div>
+            </form>
+        </main>
+
+        <!-- Live Preview Column -->
+        <aside class="preview-card-wrap">
+            <div class="preview-card">
+                <div class="preview-header">
+                    <span class="preview-title">Live Preview</span>
+                    <span class="id-badge">NEW ITEM</span>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:16px; margin: 16px 0;">
+                    <div class="action-icon" style="background:#ffffff; border:1px solid var(--primary-border); font-size: 32px; width:64px; height:64px;">🍲</div>
+                    <div>
+                        <h3 id="previewName" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Paneer Butter Masala</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">Culinary Specimen</p>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-top:16px; border-top:1px solid var(--border);">
+                    <div>
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.06em;">Price</span>
+                        <div id="previewPrice" class="price-tag" style="font-size: 1.4rem;">₹240.00</div>
+                    </div>
+                    <div>
+                        <span id="previewStatus" class="badge badge-yes">● Available</span>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-top: 14px; text-align: center;">
+                ✨ Card dynamically updates as you type
+            </p>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>Spring Boot JPA System</span>
+        <span>•</span>
+        <span class="footer-pill">Automatic Validation</span>
+        <span>•</span>
+        <span class="footer-pill">MySQL 8.0</span>
+    </footer>
+</div>
+
+<script>
+function updateLivePreview() {
+    const nameInput = document.getElementById('foodName').value.trim();
+    const priceInput = document.getElementById('price').value.trim();
+    const availableSelect = document.getElementById('isAvailable').value;
+
+    const previewName = document.getElementById('previewName');
+    const previewPrice = document.getElementById('previewPrice');
+    const previewStatus = document.getElementById('previewStatus');
+
+    previewName.textContent = nameInput || "Dish Name Preview";
+    
+    if (priceInput && !isNaN(priceInput)) {
+        previewPrice.textContent = "₹" + parseFloat(priceInput).toFixed(2);
+    } else {
+        previewPrice.textContent = "₹0.00";
+    }
+
+    if (availableSelect === "true") {
+        previewStatus.className = "badge badge-yes";
+        previewStatus.textContent = "● Available";
+    } else {
+        previewStatus.className = "badge badge-no";
+        previewStatus.textContent = "● Out of Stock";
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', updateLivePreview);
+</script>
+</body>
+</html>

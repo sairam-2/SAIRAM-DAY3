@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Food Items | Foodie</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a class="brand" href="/">
+            <span class="brand-mark">✨</span>
+            <span>Foodie<span class="brand-text-accent">Cloud</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/">📊 Dashboard</a>
+            <a href="/create">➕ Add Food</a>
+            <a href="/read">📋 Catalog</a>
+            <a href="/update" class="active">✏️ Edit</a>
+            <a href="/delete">🗑️ Delete</a>
+        </div>
+    </nav>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div>
+            <p class="eyebrow">UPDATE OPERATION</p>
+            <h1 class="page-heading">Modify Dish Specifications</h1>
+            <p class="subtitle">Quickly edit dish names, adjust pricing, or flip availability status.</p>
+        </div>
+        <div class="actions">
+            <a class="btn btn-secondary" href="/read">📋 Back to Catalog</a>
+            <a class="btn btn-primary" href="/create">➕ Add New Dish</a>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div th:if="${#lists.isEmpty(foods)}" class="card empty-state">
+        <div class="empty-icon">✏️</div>
+        <h3>No Records to Edit</h3>
+        <p>Your database has no dishes registered yet. Add a dish first to enable editing.</p>
+        <a class="btn btn-primary" href="/create">➕ Create Dish</a>
+    </div>
+
+    <!-- Edit Grid -->
+    <section th:unless="${#lists.isEmpty(foods)}" class="edit-grid">
+        <div class="edit-card" th:each="food : ${foods}" th:id="'food-' + ${food.id}">
+            <div class="card-top">
+                <span class="id-badge" th:text="'FOOD #' + ${food.id}">FOOD #1</span>
+                <span th:if="${food.isAvailable}" class="badge badge-yes">● Available</span>
+                <span th:unless="${food.isAvailable}" class="badge badge-no">● Out of Stock</span>
+            </div>
+
+            <form th:action="@{/update}" method="post">
+                <input type="hidden" name="id" th:value="${food.id}">
+
+                <div class="field">
+                    <label th:for="'name-' + ${food.id}">Dish Name</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🍲</span>
+                        <input th:id="'name-' + ${food.id}" class="input-with-icon" type="text" name="foodName" th:value="${food.foodName}" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label th:for="'price-' + ${food.id}">Price (₹ INR)</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">₹</span>
+                        <input th:id="'price-' + ${food.id}" class="input-with-icon" type="number" name="price" th:value="${food.price}" step="0.01" min="0" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label th:for="'available-' + ${food.id}">Availability Status</label>
+                    <select th:id="'available-' + ${food.id}" name="isAvailable" required>
+                        <option value="true" th:selected="${food.isAvailable == true}">🟢 Available</option>
+                        <option value="false" th:selected="${food.isAvailable == false}">🔴 Out of Stock</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" type="submit" style="width:100%; margin-top: 10px;">
+                    ✓ Save Changes
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>Spring Boot JPA System</span>
+        <span>•</span>
+        <span class="footer-pill">Direct Record Updates</span>
+        <span>•</span>
+        <span class="footer-pill">MySQL 8.0</span>
+    </footer>
+</div>
+</body>
+</html>
